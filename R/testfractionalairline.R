@@ -18,8 +18,11 @@ lines(m2$decomposition$t, col="blue")
 y=usclaims[,2]
 rslt<-rjd3highfreq::fractionalAirlineEstimation(log(y), periods=c(365.25/7), outliers=c("ao"), criticalValue = 6)
 
+
 m1<-fractionalAirlineDecomposition(rslt$model$linearized, 365.25/7, stde = T)
 m2<-fractionalAirlineDecomposition(rslt$model$linearized, 52, stde=T)
+
+x11rslt<-rjd3highfreq::x11(rslt$model$linearized, period=365.25/7, mul=F , trend.horizon = 53, seas.s1 = 'S3X1')
 
 plot(idx, m1$decomposition$s[idx], "l")
 lines(idx, m2$decomposition$s[idx], col="red")

@@ -2,12 +2,24 @@ suppressPackageStartupMessages(library(rjd3highfreq))
 traffic<-read.csv("./Data/traffic.csv")
 y<-log(traffic[-(1:5844),2])
 
-# Create holidays. See also testholidays.R for other examples and for weekly variables.
-jhol<-rjd3highfreq::Holidays("NewYear",c(3, 21), "GoodFriday", "EasterMonday", c(4, 27), "MayDay", c(6,16),
-                             c(8, 9), c(9, 24), c(12, 16), "Christmas", list("Christmas", offset=1))
 
-hol<-rjd3highfreq::HolidaysMatrix(jhol, "2010-01-01", length = length(y), type = "Default")
-vars<-hol$ptr
+jhol<-calendar.new()
+calendar.holiday(jhol, "NEWYEAR")
+calendar.fixedday(jhol, month=3, day=21)
+calendar.holiday(jhol, "NEWYEAR", offset = 1)
+calendar.holiday(jhol, "GOODFRIDAY")
+calendar.holiday(jhol, "EASTERMONDAY")
+calendar.fixedday(jhol, month=4, day=27)
+calendar.holiday(jhol, "MAYDAY")
+calendar.fixedday(jhol, month=6, day=16)
+calendar.fixedday(jhol, month=8, day=9)
+calendar.fixedday(jhol, month=9, day=24)
+calendar.fixedday(jhol, month=12, day=16)
+calendar.holiday(jhol, "CHRISTMAS")
+calendar.holiday(jhol, "CHRISTMAS", offset=1)
+
+
+vars<-rjd3modelling::holidays(jhol, "2010-01-01", length = length(y), type = "Skip")
 
 # RegArima (fractional airline), using the pre-specified regression variables (X), any periodicities (all are considered together)
 # and automatic outlier detection. Possible outliers are additive outliers (ao = ...0 0 1 0 0 ...), 

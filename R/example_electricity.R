@@ -13,13 +13,24 @@ y<-log(edf2$y)
 # are provided in the output). 
 
 # Create holidays. See also testholidays.R for other examples and for weekly variables.
-jhol<-rjd3highfreq::Holidays("NewYear", list("NewYear", offset=1), 
-                             "EasterMonday", "MayDay", "Ascension", "WhitMonday", c(5,8), c(7,14),
-                             "Assumption", "AllSaintsDay", "Armistice",
-                             list("Christmas", offset=-1), "Christmas", list("Christmas", offset=1), c(12,31)
-                      )
+jhol<-calendar.new()
+calendar.holiday(jhol, "NEWYEAR")
+calendar.holiday(jhol, "NEWYEAR", offset = 1)
+calendar.holiday(jhol, "EASTERMONDAY")
+calendar.holiday(jhol, "MAYDAY")
+calendar.holiday(jhol, "ASCENSION")
+calendar.holiday(jhol, "WHITMONDAY")
+calendar.fixedday(jhol, month=5, day=8)
+calendar.fixedday(jhol, month=7, day=14)
+calendar.holiday(jhol, "ASSUMPTION")
+#calendar.holiday(jhol, "ALLSAINTDAY")
+calendar.holiday(jhol, "ARMISTICE")
+calendar.holiday(jhol, "CHRISTMAS", offset=-1)
+calendar.holiday(jhol, "CHRISTMAS")
+calendar.holiday(jhol, "CHRISTMAS", offset=1)
 
-hol<-rjd3highfreq::HolidaysMatrix(jhol, "1996-01-01", length = length(y), type = "Default")
+
+hol<-rjd3modelling::holidays(jhol, "1996-01-01", length = length(y), type = "Skip")
 
 # adding some user-defined variables. Dummies for end of months (first obs at 1/1/leapyear)
 months<-c(31,28,31,30,31,30,31,31,30,31,30,31)
@@ -34,7 +45,7 @@ endofmonth2<-array(0,dim=length(y))
 endofmonth1[idx]<-1
 endofmonth2[idx-1]<-1
 
-vars<-cbind(hol$ptr, endofmonth1, endofmonth2)
+vars<-cbind(hol, endofmonth1, endofmonth2)
 
 
 # RegArima (fractional airline), using the pre-specified regression variables (X), any periodicities (all are considered together)

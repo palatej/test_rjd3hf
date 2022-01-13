@@ -2,12 +2,23 @@ suppressPackageStartupMessages(library(rjd3highfreq))
 traffic<-read.csv("./Data/traffic.csv")
 y<-log(traffic[-(1:5844),2])
 
-# Create holidays. See also testholidays.R for other examples and for weekly variables.
-jhol<-rjd3highfreq::Holidays("NewYear",c(3, 21), "GoodFriday", "EasterMonday", c(4, 27), "MayDay", c(6,16),
-                      c(8, 9), c(9, 24), c(12, 16), "Christmas", list("Christmas", offset=1))
+jhol<-calendar.new()
+calendar.holiday(jhol, "NEWYEAR")
+calendar.fixedday(jhol, month=3, day=21)
+calendar.holiday(jhol, "NEWYEAR", offset = 1)
+calendar.holiday(jhol, "GOODFRIDAY")
+calendar.holiday(jhol, "EASTERMONDAY")
+calendar.fixedday(jhol, month=4, day=27)
+calendar.holiday(jhol, "MAYDAY")
+calendar.fixedday(jhol, month=6, day=16)
+calendar.fixedday(jhol, month=8, day=9)
+calendar.fixedday(jhol, month=9, day=24)
+calendar.fixedday(jhol, month=12, day=16)
+calendar.holiday(jhol, "CHRISTMAS")
+calendar.holiday(jhol, "CHRISTMAS", offset=1)
 
-hol<-rjd3highfreq::HolidaysMatrix(jhol, "2010-01-01", length = length(y), type = "Default")
-vars<-hol$ptr
+
+vars<-rjd3modelling::holidays(jhol, "2010-01-01", length = length(y), type = "Skip")
 
 # RegArima (fractional airline), using the pre-specified regression variables (X), any periodicities (all are considered together)
 
@@ -24,13 +35,24 @@ lin<-rslt$model$linearized
 
 c<-rjd3highfreq::fractionalAirlineDecomposition(lin, period=7)
 c1<-rjd3highfreq::fractionalAirlineDecomposition(c$decomposition$sa, period=365.25)
-# final decomposition (w=weekly component, s=annual component. Final seasonal component is w+s (+calendar effets))
+# final decomposition (w=weekly component, s=annual component. Final seasonal component is w+s (+calendar effects))
 w<-c$decomposition$s
 t<-c1$decomposition$t
 sa<-c1$decomposition$sa
 s<-c1$decomposition$s
 i<-c1$decomposition$i
-seatsdecomp<-cbind(y,t,sa,w,s,i)
+seatsdecomp<-cbind(lin,t,sa,w,s,i)
+
+x11c<-rjd3highfreq::x11(lin, period=7, mul=F, trend.horizon = 15, seas.s1 = 'S3X15')
+x11c1<-rjd3highfreq::x11(x11c$decomposition$sa, mul=F, period=365.25, trend.horizon = 367)
+# final decomposition (w=weekly component, s=annual component. Final seasonal component is w+s (+calendar effects))
+x11w<-x11c$decomposition$s
+x11t<-x11c1$decomposition$t
+x11sa<-x11c1$decomposition$sa
+x11s<-x11c1$decomposition$s
+x11i<-x11c1$decomposition$i
+x11decomp<-cbind(lin,x11t,x11sa,x11w,x11s,x11i)
+
 
 # Some charts. 
 n<-length(y)
@@ -39,6 +61,10 @@ lines(seatsdecomp[(n-400):n, "s"], col="red")
 plot(y[(n-400):n], type="l", col="gray")
 lines(seatsdecomp[(n-400):n, "sa"], col="blue")
 lines(seatsdecomp[(n-400):n, "t"], col="red")
+
+plot(x11decomp[(n-400):n, "x11w"], type="l")
+lines(x11decomp[(n-400):n, "x11s"], col="red")
+
 
 elin<-lin[(n-228):n]
 ec<-rjd3highfreq::fractionalAirlineDecomposition(elin, period=7, TRUE)
