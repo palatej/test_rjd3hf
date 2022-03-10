@@ -1,4 +1,5 @@
-suppressPackageStartupMessages(library(rjd3highfreq))
+library(rjd3highfreq)
+library(rjd3modelling)
 traffic<-read.csv("./Data/traffic.csv")
 y<-log(traffic[-(1:5844),2])
 

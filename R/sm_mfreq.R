@@ -8,13 +8,13 @@ sm_daily<-function(y){
   eq<-rjd3sts::equation("eq")
   # create the components and add them to the model
   rjd3sts::add(sm, rjd3sts::noise("n"))
-  rjd3sts::add(eq, "n")
+  rjd3sts::add.equation(eq, "n")
   rjd3sts::add(sm, rjd3sts::locallevel("ll"))
-  rjd3sts::add(eq, "ll")
+  rjd3sts::add.equation(eq, "ll")
   rjd3sts::add(sm, rjd3sts::seasonal("s", 7, type="HarrisonStevens"))
-  rjd3sts::add(eq, "s")
+  rjd3sts::add.equation(eq, "s")
   rjd3sts::add(sm, rjd3sts::periodic("y", period=365.25, harmonics=har))
-  rjd3sts::add(eq, "y")
+  rjd3sts::add.equation(eq, "y")
   rjd3sts::add(sm, eq)
   #estimate the model
   rslt<-rjd3sts::estimate(sm, y, marginal=F, initialization="Augmented_NoCollapsing", optimizer="LevenbergMarquardt", concentrated=TRUE, precision = 1e-5)

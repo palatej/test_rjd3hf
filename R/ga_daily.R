@@ -1,4 +1,5 @@
-suppressPackageStartupMessages(library(rjd3highfreq))
+library(rjd3highfreq)
+library(rjd3toolkit)
 
 ga_week<-function(y, period=7){
   jrslt<-rjd3highfreq::fractionalAirlineDecomposition.raw(y, period)

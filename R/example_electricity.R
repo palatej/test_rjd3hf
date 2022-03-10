@@ -1,4 +1,5 @@
-suppressPackageStartupMessages(library(rjd3highfreq))
+library(rjd3highfreq)
+library(rjd3modelling)
 #edf<-read.table("./Data/edf.txt")
 
 edf2<-read.csv("./Data/edf.csv")

@@ -1,4 +1,5 @@
 suppressPackageStartupMessages(library(rjd3sts))
+library(rjd3toolkit)
 
 sm_week<-function(y, seasonal="HarrisonStevens"){
   # create the model
@@ -6,11 +7,11 @@ sm_week<-function(y, seasonal="HarrisonStevens"){
   eq<-rjd3sts::equation("eq")
   # create the components and add them to the model
   rjd3sts::add(sm, rjd3sts::noise("n"))
-  rjd3sts::add(eq, "n")
+  rjd3sts::add.equation(eq, "n")
   rjd3sts::add(sm, rjd3sts::locallineartrend("ll"))
-  rjd3sts::add(eq, "ll")
+  rjd3sts::add.equation(eq, "ll")
   rjd3sts::add(sm, rjd3sts::seasonal("s", 7, type=seasonal))
-  rjd3sts::add(eq, "s")
+  rjd3sts::add.equation(eq, "s")
   rjd3sts::add(sm, eq)
   #estimate the model
   rslt<-rjd3sts::estimate(sm, y, marginal=F, initialization="SqrtDiffuse", optimizer="LevenbergMarquardt", concentrated=TRUE, precision = 1e-10)
@@ -25,13 +26,13 @@ sm_weekt<-function(y, seasonal="HarrisonStevens", pos){
   eq<-rjd3sts::equation("eq")
   # create the components and add them to the model
   rjd3sts::add(sm, rjd3sts::locallineartrend("ll"))
-  rjd3sts::add(eq, "ll")
+  rjd3sts::add.equation(eq, "ll")
   rjd3sts::add(sm, rjd3sts::seasonal("s", 7, type=seasonal))
-  rjd3sts::add(eq, "s")
+  rjd3sts::add.equation(eq, "s")
   rjd3sts::add(sm, rjd3sts::reg("x", t))
-  rjd3sts::add(eq, "x")
+  rjd3sts::add.equation(eq, "x")
   rjd3sts::add(sm, rjd3sts::noise("n"))
-  rjd3sts::add(eq, "n")
+  rjd3sts::add.equation(eq, "n")
   rjd3sts::add(sm, eq)
   #estimate the model
   rslt<-rjd3sts::estimate(sm, y, marginal=F, initialization="SqrtDiffuse", optimizer="LevenbergMarquardt", concentrated=TRUE, precision = 1e-10)
@@ -45,11 +46,11 @@ sm_var<-function(y, period, std_t, std_w, std_n, seasonal="HarrisonStevens"){
   eq<-rjd3sts::equation("eq")
   # create the components and add them to the model
   rjd3sts::add(sm, rjd3sts::varlocallineartrend("ll", lstd = std_t))
-  rjd3sts::add(eq, "ll")
+  rjd3sts::add.equation(eq, "ll")
   rjd3sts::add(sm, rjd3sts::varseasonal("s", period, type=seasonal, std = std_w))
-  rjd3sts::add(eq, "s")
+  rjd3sts::add.equation(eq, "s")
   rjd3sts::add(sm, rjd3sts::varnoise("n", std=std_n))
-  rjd3sts::add(eq, "n")
+  rjd3sts::add.equation(eq, "n")
   rjd3sts::add(sm, eq)
   #estimate the model
   rslt<-rjd3sts::estimate(sm, y, initialization="SqrtDiffuse")

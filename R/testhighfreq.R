@@ -1,4 +1,4 @@
-suppressPackageStartupMessages(library(rjd3highfreq))
+library(rjd3highfreq)
 
 births<-read.table("./Data/births.txt")
 deaths<-read.table("./Data/deaths.txt")

@@ -1,4 +1,7 @@
-suppressPackageStartupMessages(library(rjd3highfreq))
+library(rjd3highfreq)
+library(rjd3modelling)
+library(rjd3toolkit)
+
 traffic<-read.csv("./Data/traffic.csv")
 y<-log(traffic[-(1:5844),2])
 
@@ -107,13 +110,13 @@ sm<-rjd3sts::model()
 eq<-rjd3sts::equation("eq")
 # create the components and add them to the model
 rjd3sts::add(sm, rjd3sts::noise("n"))
-rjd3sts::add(eq, "n")
+rjd3sts::add.equation(eq, "n")
 rjd3sts::add(sm, rjd3sts::locallineartrend("ll"))
-rjd3sts::add(eq, "ll")
+rjd3sts::add.equation(eq, "ll")
 rjd3sts::add(sm, rjd3sts::seasonal("s", 7, type="HarrisonStevens"))
-rjd3sts::add(eq, "s")
+rjd3sts::add.equation(eq, "s")
 rjd3sts::add(sm, rjd3sts::reg("x", vars))
-rjd3sts::add(eq, "x")
+rjd3sts::add.equation(eq, "x")
 rjd3sts::add(sm, eq)
 #estimate the model
 smrslt<-rjd3sts::estimate(sm, y, marginal=F, initialization="Diffuse", optimizer="LevenbergMarquardt", concentrated=TRUE, precision = 1e-10)
@@ -130,40 +133,3 @@ plot(exp(seatsdecomp[seq(7,2000,7), "w"]), type='l')
 lines(exp(seatsdecomp2[seq(7,2000,7), "w"]), col="red")
 lines(exp(smw[seq(7,2000,7)]), col="blue")
 
-sm<-rjd3sts::model()
-eq<-rjd3sts::equation("eq")
-# create the components and add them to the model
-rjd3sts::add(sm, rjd3sts::noise("n"))
-rjd3sts::add(eq, "n")
-rjd3sts::add(sm, rjd3sts::locallineartrend("ll"))
-rjd3sts::add(eq, "ll")
-rjd3sts::add(sm, rjd3sts::seasonal("s", 365, type="HarrisonStevens"))
-rjd3sts::add(eq, "s")
-rjd3sts::add(sm, eq)
-#estimate the model
-smrslt2<-rjd3sts::estimate(sm, smfstates[,pos[1]+1]+smfstates[,pos[2]+1], marginal=F, initialization="SqrtDiffuse", optimizer="LevenbergMarquardt", concentrated=TRUE, precision = 1e-10)
-pos2<-result(smrslt2, "ssf.cmppos")
-smfstates2<-result(smrslt2, "ssf.smoothing.states")
-smy<-smfstates2[,pos[3]+1]
-plot(exp(smy[1:1097]), type="l")
-lines(exp(smw[1:1097]), col="red")
-
-
-sm<-rjd3sts::model()
-eq<-rjd3sts::equation("eq")
-# create the components and add them to the model
-rjd3sts::add(sm, rjd3sts::noise("n"))
-rjd3sts::add(eq, "n")
-rjd3sts::add(sm, rjd3sts::locallineartrend("ll"))
-rjd3sts::add(eq, "ll")
-rjd3sts::add(sm, rjd3sts::periodic("s1", 365, as.integer(seq(1,9))))
-rjd3sts::add(eq, "s1")
-rjd3sts::add(sm, eq)
-#estimate the model
-smrslt3<-rjd3sts::estimate(sm, lin-smw, marginal=F, initialization="Augmented_NoCollapsing", optimizer="LevenbergMarquardt", concentrated=TRUE, precision = 1e-10)
-pos3<-result(smrslt3, "ssf.cmppos")
-smfstates3<-result(smrslt3, "ssf.smoothing.states")
-smy3<-rowSums(smfstates3[,pos3[3]+seq(1,17,2)])
-smt<-smfstates3[,pos3[2]+1]
-plot(exp(smy3[1:1097]), type="l")
-lines(exp(smw[1:1097]), col="red")
