@@ -32,17 +32,17 @@ wa2<-a2$decomposition$s
 
 plot(wa2[2000:2500], type="l")
 
-b<-rjd3highfreq::stl(y, period=7, swindow = 21)
-b1<-rjd3highfreq::stl(b$decomposition$sa, period=365, swindow=3)
-wb<-b1$decomposition$s
+b<-rjd3stl::stl(y, period=7, swindow = 21)
+b1<-rjd3stl::stl(b$decomposition[,'sa'], period=365, swindow=3)
+wb<-b1$decomposition[,'s']
 plot(wb[2000:2500], type="l")
 
 # The final decomposition is given by
-w<-b$decomposition$s
-t<-b1$decomposition$t
-sa<-b1$decomposition$sa
-s<-b1$decomposition$s
-i<-b1$decomposition$i
+w<-b$decomposition[,'s']
+t<-b1$decomposition[,'t']
+sa<-b1$decomposition[,'sa']
+s<-b1$decomposition[,'s']
+i<-b1$decomposition[,'i']
 stldecomp<-cbind(y,t,sa,w, s,i)
 
 c<-rjd3highfreq::fractionalAirlineDecomposition(log(y), period=7)
