@@ -1,25 +1,24 @@
 library(rjd3highfreq)
-library(rjd3modelling)
+library(rjd3toolkit)
 traffic<-read.csv("./Data/traffic.csv")
 y<-log(traffic[-(1:5844),2])
 
-jhol<-calendar.new()
-calendar.holiday(jhol, "NEWYEAR")
-calendar.fixedday(jhol, month=3, day=21)
-calendar.holiday(jhol, "NEWYEAR", offset = 1)
-calendar.holiday(jhol, "GOODFRIDAY")
-calendar.holiday(jhol, "EASTERMONDAY")
-calendar.fixedday(jhol, month=4, day=27)
-calendar.holiday(jhol, "MAYDAY")
-calendar.fixedday(jhol, month=6, day=16)
-calendar.fixedday(jhol, month=8, day=9)
-calendar.fixedday(jhol, month=9, day=24)
-calendar.fixedday(jhol, month=12, day=16)
-calendar.holiday(jhol, "CHRISTMAS")
-calendar.holiday(jhol, "CHRISTMAS", offset=1)
+MyCalendar <- national_calendar(list(
+  fixed_day(5,8),
+  fixed_day(7, 21),
+  special_day('NEWYEAR'),
+  special_day('CHRISTMAS'),
+  special_day('CHRISTMAS', 1),
+  special_day('MAYDAY'),
+  easter_day(1), # Easter Monday
+  special_day('ASCENSION'),
+  special_day('WHITMONDAY'),
+  special_day('ASSUMPTION'),
+  special_day('ALLSAINTSDAY'),
+  special_day('ARMISTICE')))
 
 
-vars<-rjd3modelling::holidays(jhol, "2010-01-01", length = length(y), type = "Skip")
+vars<-holidays(MyCalendar, "1996-01-01", length = length(y), type = "Skip")
 
 # RegArima (fractional airline), using the pre-specified regression variables (X), any periodicities (all are considered together)
 

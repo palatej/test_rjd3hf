@@ -41,7 +41,7 @@ step1<-rjd3highfreq::fractionalAirlineEstimation(y, periods=4,
 lin<-step1$model$linearized
 
 # outliers effects (ao)
-ao<-step1$model$X%*%t(step1$model$b)
+ao<-step1$model$xreg%*%t(step1$model$b)
 
 step2<-rjd3highfreq::fractionalAirlineDecomposition(lin, period=4)
 
