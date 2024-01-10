@@ -43,8 +43,8 @@ s<-c1$decomposition$s
 i<-c1$decomposition$i
 seatsdecomp<-cbind(lin,t,sa,w,s,i)
 
-x11c<-rjd3highfreq::x11(lin, period=7, mul=F, trend.horizon = 15, seas.s1 = 'S3X15')
-x11c1<-rjd3highfreq::x11(x11c$decomposition$sa, mul=F, period=365.25, trend.horizon = 367)
+x11c<-rjd3x11plus::x11plus(lin, period=7, mul=F, trend.horizon = 15, seas.s1 = 'S3X15')
+x11c1<-rjd3x11plus::x11plus(x11c$decomposition$sa, mul=F, period=365.25, trend.horizon = 367)
 # final decomposition (w=weekly component, s=annual component. Final seasonal component is w+s (+calendar effects))
 x11w<-x11c$decomposition$s
 x11t<-x11c1$decomposition$t

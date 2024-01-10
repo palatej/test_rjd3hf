@@ -6,10 +6,10 @@ ukdeaths<-read.csv("./Data/uk_deaths.csv")
 y<-ukdeaths[,1]
 
 # X11 applied with exact weekly periodicity
-m1<-rjd3highfreq::x11(y, 365.25/7,seas.s1="S3X5")
+m1<-rjd3x11plus::x11plus(y, 365.25/7,seas.s1="S3X5")
 
 # X11 applied with approximate weekly periodicity
-m2<-rjd3highfreq::x11(y, 52)
+m2<-rjd3x11plus::x11plus(y, 52)
 n<-length(y)
 
 #plot seasonal components
@@ -27,5 +27,5 @@ lines(m2$decomposition$t, col="red")
 lines(m1$decomposition$t, col="blue")
 
 # long (3 years) Henderson smoothing of the seasonally adjusted series
-plot(rjd3highfreq::henderson(a1$decomposition$sa, length=157), type="l")
+plot(rjd3x11plus::henderson(a1$decomposition$sa, length=157), type="l")
 

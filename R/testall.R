@@ -1,4 +1,6 @@
 suppressPackageStartupMessages(library(rjd3highfreq))
+suppressPackageStartupMessages(library(rjd3stl))
+suppressPackageStartupMessages(library(rjd3x11plus))
 
 bedeath<-read.csv("./Data/tf_deaths.csv")
 
@@ -12,24 +14,24 @@ y<-bedeath[,2]
 
 # Apply first multiplicative STL for weekly periodicity. To be noted that multiplicative STL is not provided
 # in usual packages
-#sa1<-rjd3stl::stl(y, period=7, multiplicative = TRUE, swindow=53, twindow=9)
+sa1<-rjd3stl::stlplus(y, period=7, multiplicative = TRUE, swindow=53, twindow=9)
 
 # Apply then multiplicative STL for annual (approximate) periodicity on the "seasonally adjusted" series
-#sa2<-rjd3stl::stl(sa1$decomposition[,'sa'], period=365, multiplicative = T, swindow=5)
+sa2<-rjd3stl::stlplus(sa1$decomposition[,'sa'], period=365, multiplicative = T, swindow=5)
 
 # irregular + global seasonal component
-#plot(sa1$decomposition[,'i'], type='l')
-#lines(sa1$decomposition[,'s']*sa2$decomposition[,'s'], col="red")
+plot(sa1$decomposition[,'i'], type='l')
+lines(sa1$decomposition[,'s']*sa2$decomposition[,'s'], col="red")
 
 
-#plot(sa2$decomposition[1:730, 's'], type='l')
-#lines(sa1$decomposition[1:730, 's'], col="red")
+plot(sa2$decomposition[1:730, 's'], type='l')
+lines(sa1$decomposition[1:730, 's'], col="red")
 
 # Apply first multiplicative X11L for weekly periodicity
-sa3<-rjd3highfreq::x11(y, period=7)
+sa3<-rjd3x11plus::x11plus(y, period=7)
 
 # Apply then multiplicative X11 for annual periodicity on the "seasonally adjusted" series
-sa4<-rjd3highfreq::x11(sa3$decomposition$sa, period=365.25)
+sa4<-rjd3x11plus::x11plus(sa3$decomposition$sa, period=365.25)
 
 # The main problem with STL and X11 is that we don't know which filters we should apply (-> future research).
 # Huge differences are possible.
