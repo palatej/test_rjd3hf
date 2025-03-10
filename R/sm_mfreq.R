@@ -1,6 +1,6 @@
 suppressPackageStartupMessages(library(rjd3sts))
 
-har<-1:11
+har<-1:5
 
 sm_daily<-function(y){
   # create the model
@@ -17,7 +17,7 @@ sm_daily<-function(y){
   rjd3sts::add_equation(eq, "y")
   rjd3sts::add(sm, eq)
   #estimate the model
-  rslt<-rjd3sts::estimate(sm, y, marginal=F, initialization="Augmented_NoCollapsing", optimizer="LevenbergMarquardt", concentrated=TRUE, precision = 1e-5)
+  rslt<-rjd3sts::estimate(sm, y, marginal=F, initialization="Augmented_Robust", optimizer="LevenbergMarquardt", concentrated=TRUE, precision = 1e-5)
   return(rslt)
 }
 
@@ -31,6 +31,7 @@ y<-edf[,1]
 #y<-traffic[,2]
 
 a<-sm_daily(log(y))
-sa<-result(a, "ssf.smoothing.states")
-pos<-result(a, "ssf.cmppos")
+sa<-rjd3toolkit::result(a, "ssf.smoothing.states")
+pos<-rjd3toolkit::result(a, "ssf.cmppos")
 plot(rowSums(sa[, pos[4]+seq(1, length(har)*2-1,2)]), type='l')
+plot(sa[1000:2000, pos[3]+1], type='l')
