@@ -21,22 +21,22 @@ y<-edf$y
 
 hol<-holidays(MyCalendar, "1996-01-01", length = length(y), type = "Skip", single = FALSE)
 
-spec1<-.extendedairline_spec(7)
+spec1<-.extended_airline_spec(7)
 
-regarima1<-.extendedairline_regarima(y, spec1)
+regarima1<-.extended_airline_regarima(y, spec1)
 
-print(.extendedairline_loglevel(regarima1, spec1))
+print(.extended_airline_loglevel(regarima1, spec1))
 
-spec2<-.extendedairline_spec(c(7, 365.25))
+spec2<-.extended_airline_spec(c(7, 365.25))
 
-regarima2<-.extendedairline_regarima(y, spec2)
+regarima2<-.extended_airline_regarima(y, spec2)
 
-print(.extendedairline_loglevel(regarima2, spec2))
+print(.extended_airline_loglevel(regarima2, spec2))
 
-regarima3<-.extendedairline_regarima(y, spec1, X= hol)
+regarima3<-.extended_airline_regarima(y, spec1, X= hol)
 
-print(.extendedairline_loglevel(regarima3, spec1))
+print(.extended_airline_loglevel(regarima3, spec1))
 
-regarima4<-.extendedairline_regarima(y, spec2, X=hol)
+regarima4<-.extended_airline_regarima(y, spec2, X=hol)
 
-print(.extendedairline_loglevel(regarima4, spec2))
+print(.extended_airline_loglevel(regarima4, spec2))

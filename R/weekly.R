@@ -16,7 +16,7 @@ period<-365.25/7
 model<-rjd3sts::model()
 
 ll<-rjd3sts::locallevel('l')
-seas<-rjd3sts::splines_regular('s', period, nnodes=25)
+seas<-rjd3sts::splines_regular('s', period, nknots=25)
 n<-rjd3sts::noise('n')
 rjd3sts::add(model, ll)
 rjd3sts::add(model, seas)

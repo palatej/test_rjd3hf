@@ -21,36 +21,36 @@ y<-edf$y
 
 hol<-holidays(MyCalendar, "1996-01-01", length = length(y), type = "Skip", single = FALSE)
 
-spec1<-.extendedairline_spec(7)
+spec1<-.extended_airline_spec(7)
 
-regarima1<-.extendedairline_regarima(y, spec1)
+regarima1<-.extended_airline_regarima(y, spec1)
 
-rslt<-.extendedairline_estimation(regarima1, spec1)
-
-print(result(rslt, "likelihood.ll"))
-
-spec2<-.extendedairline_spec(c(7, 365.25))
-
-regarima2<-.extendedairline_regarima(y, spec2)
-
-rslt<-.extendedairline_estimation(regarima2, spec2)
+rslt<-.extended_airline_estimation(regarima1, spec1)
 
 print(result(rslt, "likelihood.ll"))
 
-regarima1<-.extendedairline_regarima(log(y), spec1)
+spec2<-.extended_airline_spec(c(7, 365.25))
 
-rslt<-.extendedairline_estimation(regarima1, spec1)
+regarima2<-.extended_airline_regarima(y, spec2)
+
+rslt<-.extended_airline_estimation(regarima2, spec2)
 
 print(result(rslt, "likelihood.ll"))
 
-regarima2<-.extendedairline_regarima(log(y), spec1, X=hol)
+regarima1<-.extended_airline_regarima(log(y), spec1)
 
-rslt<-.extendedairline_estimation(regarima2, spec1)
+rslt<-.extended_airline_estimation(regarima1, spec1)
+
+print(result(rslt, "likelihood.ll"))
+
+regarima2<-.extended_airline_regarima(log(y), spec1, X=hol)
+
+rslt<-.extended_airline_estimation(regarima2, spec1)
 
 print(result(rslt, "likelihood.aicc"))
 
-regarima3<-.extendedairline_regarima(log(y), spec2, X=hol)
+regarima3<-.extended_airline_regarima(log(y), spec2, X=hol)
 
-rslt<-.extendedairline_estimation(regarima3, spec2)
+rslt<-.extended_airline_estimation(regarima3, spec2)
 
 print(result(rslt, "likelihood.aicc"))

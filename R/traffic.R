@@ -5,7 +5,6 @@ y<-log(traffic[-(1:5844),2])
 
 MyCalendar <- national_calendar(list(
   fixed_day(5,8),
-  fixed_day(7, 21),
   special_day('NEWYEAR'),
   special_day('CHRISTMAS'),
   special_day('CHRISTMAS', 1),
