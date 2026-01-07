@@ -4,7 +4,7 @@ library(rjd3toolkit)
 
 edf2<-read.csv("./Data/edf.csv")
 
-y<-log(edf2$y)
+y<-log(edf2$Electricity)
 
 # Complete "two-steps" seasonal adjustment.
 # Step 1. RegArima pre-processing
